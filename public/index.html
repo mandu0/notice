@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <div class="container"></div>
+  
+  <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+  
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyA9i1W9eITIax7TISUvDckTsT4QO_H39xU",
+      authDomain: "notice-30248.firebaseapp.com",
+      projectId: "notice-30248",
+      storageBucket: "notice-30248.appspot.com",
+      messagingSenderId: "710826355214",
+      appId: "1:710826355214:web:23d846cec98a6d5644aa5f",
+      measurementId: "G-T98RVHKHWD"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+    <script>
+    const db = firebase.firestore();
+    db.collection('notice').get().then((결과) => {
+      결과.forEach((doc) => {
+        console.log(doc.data());
+        const template = `<div class="title">${doc.data().storage.작성자}</div>
+        <p class="content">${doc.data().storage.내용}</p>
+        <p class="date">${doc.data().storage.날짜}</p>`;
+
+        $('.container').append(template);
+      })
+    })
+  </script>
+</body>
+</html>
