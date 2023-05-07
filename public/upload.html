@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="upload.css">
 </head>
 <body>
 
     <div class="container mt-3">
-        <input type="text" class="form-control mt-2" id="title" placeholder="title">
-        <textarea class="form-control mt-2" id="content" placeholder="내용"></textarea>
-        <button class="btn btn-danger mt-3" id="send">올리기</button>
+        <input type="text" class="title form-control mt-2" id="title" placeholder="작성자">
+        <textarea class="content form-control mt-2" id="content" placeholder="원하는 글을 작성해보세요."></textarea>
+        <button class="btn btn-danger mt-3" id="send"><span>글 올리기</span></button>
+        <button class="change">수정하기</button>
     </div>
   
   <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -34,21 +36,22 @@
   </script>
 
     <script>
-
     const db = firebase.firestore();
-    const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
+
     $('#send').click(function(){
         var storage = {
-             내용 : $('#content').val(),
-             작성자 : $('#title').val(), 
-             날짜 : date.toLocaleString('ko-KR', { timeZone: 'UTC' } ),
-            }
-        db.collection('notice').add({storage}).then(()=>{
-            window.location.href = "../public/index.html";
-        }).catch(() => {
-            console.log(err);
+          내용 : $('#content').val(),
+          작성자 : $('#title').val()
+        };
+
+        db.collection('notice').add({storage}).then(() => {
+            location.href = '/public/index.html';
+
+        }).catch(err => {
+            console.error(err);
         })
     });
+
 
   </script>
 </body>
