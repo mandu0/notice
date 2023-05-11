@@ -24,6 +24,7 @@ h1{
     border: 0.5px solid rgb(150, 150, 150);
     background-color: #222;
     border-radius: 5px;
+    position: relative;
 }
 .title{
     font-size: 1.2em;
@@ -58,7 +59,6 @@ h1{
   position: relative; 
   z-index: 1;
 }
-
 .btn:after {
   content: "";
   position: absolute;
@@ -76,4 +76,28 @@ h1{
 .btn:hover:after {
   -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
   transform: translateX(-9%) translateY(-25%) rotate(45deg);
+}
+.flex_container{
+  display: flex;
+
+}
+.upload{
+  text-decoration: none;
+  color: #171717;
+  font-size: 15px;
+  padding: 5px 10px 5px 10px;
+  background-color: #c4c4c4;
+  border-radius: 7px;
+  position: absolute;
+  right: 110px;
+}
+.delete{
+  border: none;
+  color: #171717;
+  font-size: 15px;
+  position: absolute;
+  right: 25px;
+  padding: 5px 10px 5px 10px;
+  background-color: #c4c4c4;
+  border-radius: 7px;
 }

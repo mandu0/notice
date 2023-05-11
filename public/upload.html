@@ -18,7 +18,6 @@
         <input type="text" class="title form-control mt-2" id="title" placeholder="작성자">
         <textarea class="content form-control mt-2" id="content" placeholder="원하는 글을 작성해보세요."></textarea>
         <button class="btn btn-danger mt-3" id="send"><span>글 올리기</span></button>
-        <button class="change">수정하기</button>
     </div>
   
   
@@ -38,18 +37,38 @@
     <script>
     const db = firebase.firestore();
 
+    const urlSearchParams = new URLSearchParams(location.search);
+
+    const id = urlSearchParams.get('id');
+    const notice = db.collection('notice');
+
+    if(id) {
+      notice.doc(id).get().then(result => {
+        const {storage} = result.data();
+        $('#title').val(storage.작성자);
+        $('#content').val(storage.내용);
+      });
+    }
+
     $('#send').click(function(){
         var storage = {
           내용 : $('#content').val(),
           작성자 : $('#title').val()
         };
 
-        db.collection('notice').add({storage}).then(() => {
-            location.href = '../public/index.html';
-
-        }).catch(err => {
-            console.error(err);
-        })
+        if(id) {
+          notice.doc(id).update({storage}).then(() => {
+            location.href = '/index.html';
+          }).catch(err => {
+              console.error(err);
+          });
+        }else{
+          notice.add({storage}).then(() => {
+              location.href = '/index.html';
+          }).catch(err => {
+              console.error(err);
+          });
+        }
     });
 
 

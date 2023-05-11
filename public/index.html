@@ -15,43 +15,77 @@
 </head>
 <body>
 
-  <h1>원하는 글을 작성해 보세요</h1>
+  <h1>마음대로 게시판</h1>
   <button class="btn"><span>글쓰기</span></button>
   <div class="container"></div>
 
   
   <script>
-    var firebaseConfig = {
-      apiKey: "AIzaSyA9i1W9eITIax7TISUvDckTsT4QO_H39xU",
-      authDomain: "notice-30248.firebaseapp.com",
-      projectId: "notice-30248",
-      storageBucket: "notice-30248.appspot.com",
-      messagingSenderId: "710826355214",
-      appId: "1:710826355214:web:23d846cec98a6d5644aa5f",
-      measurementId: "G-T98RVHKHWD"
+
+  let firebaseConfig;
+
+  async function fetchData() {
+    const response = await fetch('http://localhost:8080/');
+    const data = await response.json();
+    const apiConfig = data;
+    firebaseConfig = {
+      apiKey: apiConfig.DB_APIKEY,
+      authDomain: apiConfig.DB_DOMAIN,
+      databaseURL: apiConfig.DB_DATABASE,
+      projectId: apiConfig.DB_PROJECT,
+      storageBucket: apiConfig.DB_BUCKET,
+      messagingSenderId: apiConfig.DB_SENDER,
+      appId: apiConfig.DB_APP,
+      measurementId: apiConfig.DB_MEASUREMENT
     };
+    return firebaseConfig;
+
+  }
+
+  fetchData().then((firebaseConfig) => {
     firebase.initializeApp(firebaseConfig);
+    console.log(firebaseConfig);
+  });
+
+
+
+
+
+    
   </script>
 
     <script>
     const db = firebase.firestore();
+    console.log(db);
+
     db.collection('notice').get().then((결과) => {
       결과.forEach((doc) => {
-        console.log(doc.data());
-        const template = `
-        <div class="main_container">
-        <div class="title">글쓴이 : ${doc.data().storage.작성자}</div>
-        <p class="content">- ${doc.data().storage.내용}</p>
-        </div>`
+        const {storage} = doc.data();
                
+        $('.container').append(`
+            <div class="main_container">
+                <div class="title">글쓴이 : ${storage.작성자}</div>
+                <p class="content">- ${storage.내용}</p>
+                <div class="flex_container">
+                  <a class="upload" href="/upload.html?id=${doc.id}">수정하기</a>
+                  <button class="delete" type="button" data-doc-id="${doc.id}">삭제하기</button>
+                </div>
+            </div>
+        `);
 
-        $('.container').append(template);
+      })
+      $("button[data-doc-id]").click(function(){
+        const docId = this.dataset.docId;
+        db.collection('notice').doc(docId).delete().then(() => {
+          location.reload();
+        })
       })
     })
 
 
+
     document.querySelector('.btn').addEventListener('click', function(){
-      location.href = '../public/upload.html';
+      location.href = '/upload.html';
     })
   </script>
 </body>
